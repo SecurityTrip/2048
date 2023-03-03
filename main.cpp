@@ -23,15 +23,17 @@ void winer();
 void loose();
 int GetRandomNumber(int a, int b);
 int SetNewNumber();
+void PlaceNewNumber(std::vector<std::vector<int>>& grid);
 
 int main() {
 	bool finish = false;
     bool winner = false;
     bool looser = false;
 	std::vector<std::vector<int>> gameGrid = Initialize();
+    std::cout << "Rows: " << gameGrid.size() << std::endl << "Columns: " << gameGrid[0].size() << std::endl;
 
 	gameGrid = StarterGrid(gameGrid);
-
+    std::cout << "Rows: " << gameGrid.size() << std::endl << "Columns: " << gameGrid[0].size() << std::endl;
 
     int key;
 
@@ -42,19 +44,23 @@ int main() {
 
 notAnArrow:
         key = getch();
-
+        //#TODO Make arrows functions
         switch(key) {
             case KEY_UP:
                 upArrow(gameGrid);
+                PlaceNewNumber(gameGrid);
                 break;
             case KEY_DOWN:
                 downArrow(gameGrid);
+                PlaceNewNumber(gameGrid);
                 break;
             case KEY_LEFT:
                 leftArrow(gameGrid);
+                PlaceNewNumber(gameGrid);
                 break;
             case KEY_RIGHT:
                 rightArrow(gameGrid);
+                PlaceNewNumber(gameGrid);
                 break;
             default:
                 goto notAnArrow;
@@ -103,23 +109,27 @@ void PrintGrid(const std::vector<std::vector<int>>& grid){
             } else{
                 std::cout << "| "<< " " << " | ";
             }
-
         }
         std::cout << std::endl;
     }
 }
 
 std::vector<std::vector<int>> StarterGrid(std::vector<std::vector<int>>& grid){
+    std::vector<std::vector<int>> tmp = grid;
     for(int i = 0; i < 4; ++i){
         for(int j = 0; j < 4; ++j){
             srand(time(NULL));
             int tmp1 = GetRandomNumber(0, 4);
             int tmp2 = GetRandomNumber(0, 4);
 
-            grid[tmp1][tmp2] = SetNewNumber();
+            tmp[tmp1][tmp2] = SetNewNumber();
 
         }
     }
+    tmp[0][0] = 2;
+    tmp[0][1] = 2;
+    tmp[1][0] = 2;
+    return tmp;
 
 }
 
@@ -196,5 +206,20 @@ int SetNewNumber() {
     int index = GetRandomNumber(0,1);
 
     return vault[index];
+}
+
+// #TODO Fix PlaceNewNumber function
+void PlaceNewNumber(std::vector<std::vector<int>> &grid) {
+    int tmp1 = GetRandomNumber(0, 4);
+    int tmp2 = GetRandomNumber(0, 4);
+Fail:
+    while (grid[tmp1][tmp2] == 0){
+        tmp1 = GetRandomNumber(0, 4);
+        tmp2 = GetRandomNumber(0, 4);
+    }
+    if(grid[tmp1][tmp2] == 0){
+        goto Fail;
+    }
+    grid[tmp1][tmp2] = SetNewNumber();
 }
 
