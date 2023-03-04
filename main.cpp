@@ -3,12 +3,16 @@
 #include <conio.h>
 #include <stdio.h>
 #include "time.h"
+#include<bits/stdc++.h>
+#include<conio.h>
 
 
 #define KEY_UP 72
 #define KEY_DOWN 80
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
+#define ESC 27
+
 
 void PrintGrid(const std::vector<std::vector<int>>& grid);
 std::vector<std::vector<int>> StarterGrid(std::vector<std::vector<int>>& grid);
@@ -39,12 +43,11 @@ int main() {
 
 	while (!finish)
 	{
-
+    notAnArrow:
         PrintGrid(gameGrid);
 
-notAnArrow:
+
         key = getch();
-        //#TODO Make arrows functions
         switch(key) {
             case KEY_UP:
                 upArrow(gameGrid);
@@ -61,6 +64,9 @@ notAnArrow:
             case KEY_RIGHT:
                 rightArrow(gameGrid);
                 PlaceNewNumber(gameGrid);
+                break;
+            case ESC:
+                finish = true;
                 break;
             default:
                 goto notAnArrow;
@@ -83,35 +89,169 @@ notAnArrow:
 
 }
 
-void upArrow(std::vector<std::vector<int>> &grid) {
-
-}
-
-void downArrow(std::vector<std::vector<int>> &grid) {
-
-}
-
-void leftArrow(std::vector<std::vector<int>> &grid) {
-
-}
-
-void rightArrow(std::vector<std::vector<int>> &grid) {
-
-}
-
-void PrintGrid(const std::vector<std::vector<int>>& grid){
-    system("cls");
-
-	for(int i = 0; i < grid.size(); ++i){
-        for(int j = 0; j < grid[i].size(); ++j){
-            if(grid[i][j] != 0){
-                std::cout << "| "<< grid[i][j] << " | ";
-            } else{
-                std::cout << "| "<< " " << " | ";
+void upArrow(std::vector<std::vector<int>> &a) {
+    int i,j,li,ri;
+    for(j=0;j<4;j++)
+    {
+        li=0,ri=j;
+        for(i=1;i<4;i++)
+        {
+            if(a[i][j]!=0)
+            {
+                if(a[i-1][j]==0 || a[i-1][j]==a[i][j])
+                {
+                    if(a[li][ri]==a[i][j])
+                    {
+                        a[li][ri]*=2;
+                        a[i][j]=0;
+                    }
+                    else
+                    {
+                        if(a[li][ri]==0)
+                        {
+                            a[li][ri]=a[i][j];
+                            a[i][j]=0;
+                        }
+                        else
+                        {
+                            a[++li][ri]=a[i][j];
+                            a[i][j]=0;
+                        }
+                    }
+                }
+                else li++;
             }
         }
-        std::cout << std::endl;
     }
+
+}
+
+void downArrow(std::vector<std::vector<int>> &a) {
+    int i,j,li,ri;
+    for(j=0;j<4;j++)
+    {
+        li=3,ri=j;
+        for(i=2;i>=0;i--)
+        {
+            if(a[i][j]!=0)
+            {
+                if(a[i+1][j]==0 || a[i+1][j]==a[i][j])
+                {
+                    if(a[li][ri]==a[i][j])
+                    {
+                        a[li][ri]*=2;
+                        a[i][j]=0;
+                    }
+                    else
+                    {
+                        if(a[li][ri]==0)
+                        {
+                            a[li][ri]=a[i][j];
+                            a[i][j]=0;
+                        }
+                        else
+                        {
+                            a[--li][ri]=a[i][j];
+                            a[i][j]=0;
+                        }
+                    }
+                }
+                else li--;
+            }
+        }
+    }
+}
+
+void leftArrow(std::vector<std::vector<int>> &a) {
+    int i,j,li,ri;
+    for(i=0;i<4;i++)
+    {
+        li=i,ri=0;
+        for(j=1;j<4;j++)
+        {
+            if(a[i][j]!=0)
+            {
+                if(a[i][j-1]==0 || a[i][j-1]==a[i][j])
+                {
+                    if(a[li][ri]==a[i][j])
+                    {
+                        a[li][ri]*=2;
+                        a[i][j]=0;
+                    }
+                    else
+                    {
+                        if(a[li][ri]==0)
+                        {
+                            a[li][ri]=a[i][j];
+                            a[i][j]=0;
+                        }
+                        else
+                        {
+                            a[li][++ri]=a[i][j];
+                            a[i][j]=0;
+                        }
+                    }
+                }
+                else ri++;
+            }
+        }
+    }
+}
+
+void rightArrow(std::vector<std::vector<int>> &a) {
+    int i,j,li,ri;
+    for(i=0;i<4;i++)
+    {
+        li=i,ri=3;
+        for(j=2;j>=0;j--)
+        {
+            if(a[i][j]!=0)
+            {
+                if(a[i][j+1]==0 || a[i][j+1]==a[i][j])
+                {
+                    if(a[li][ri]==a[i][j])
+                    {
+                        a[li][ri]*=2;
+                        a[i][j]=0;
+                    }
+                    else
+                    {
+                        if(a[li][ri]==0)
+                        {
+                            a[li][ri]=a[i][j];
+                            a[i][j]=0;
+                        }
+                        else
+                        {
+                            a[li][--ri]=a[i][j];
+                            a[i][j]=0;
+                        }
+                    }
+                }
+                else ri--;
+            }
+        }
+    }
+}
+
+void PrintGrid(const std::vector<std::vector<int>>& a){
+    system("cls");
+
+    std::cout << "\n\t\tPress Esc anytime to quit the game";
+    std::cout << "\n\n\n\n";
+    int i,j;
+    for(i=0;i<4;i++)
+    {
+        std::cout << "\t\t\t\t-----------------\n\t\t\t\t";
+        for(j=0;j<4;j++)
+        {
+            if(a[i][j]==0) std::cout << "|   ";
+            else
+                std::cout << "| " << a[i][j] << " ";
+        }
+        std::cout << "|" << std:: endl;
+    }
+    std::cout << "\t\t\t\t-----------------\n";
 }
 
 std::vector<std::vector<int>> StarterGrid(std::vector<std::vector<int>>& grid){
@@ -174,10 +314,12 @@ void checkFinal(std::vector<std::vector<int>> &grid, bool end, bool win, bool lo
 
 void winer() {
 
+    std::cout << "You win" << std::endl;
 }
 
 void loose() {
 
+    std::cout << "You loose" << std::endl;
 }
 
 std::vector<std::vector<int>> Initialize() {
@@ -208,18 +350,18 @@ int SetNewNumber() {
     return vault[index];
 }
 
-// #TODO Fix PlaceNewNumber function
 void PlaceNewNumber(std::vector<std::vector<int>> &grid) {
-    int tmp1 = GetRandomNumber(0, 4);
-    int tmp2 = GetRandomNumber(0, 4);
-Fail:
-    while (grid[tmp1][tmp2] == 0){
-        tmp1 = GetRandomNumber(0, 4);
-        tmp2 = GetRandomNumber(0, 4);
+    int li,ri;
+    srand(time(0));
+    while(1)
+    {
+        li=rand()%4;
+        ri=rand()%4;
+        if(grid[li][ri]==0)
+        {
+            grid[li][ri]=pow(2,li%2 + 1);
+            break;
+        }
     }
-    if(grid[tmp1][tmp2] == 0){
-        goto Fail;
-    }
-    grid[tmp1][tmp2] = SetNewNumber();
 }
 
