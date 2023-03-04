@@ -1,10 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <conio.h>
-#include <stdio.h>
-#include "time.h"
+#include <ctime>
 #include<bits/stdc++.h>
-#include<conio.h>
+
 
 
 #define KEY_UP 72
